@@ -156,29 +156,47 @@ jobs:
           def prepare_release(github, release, version, apply):
               assets = github.pages(f'/releases/{release["id"]}/assets')
               canonical = f'{PACKAGE}-{version}.zip'
-              asset = next((item for item in assets if item['name'] == canonical), None)
+              repaired = f'{PACKAGE}-{version}-vcc.zip'
+              asset_by_name = {item['name']: item for item in assets}
+          
+              # Prefer the dedicated repair asset, then a correct canonical asset. A
+              # wrongly versioned canonical upload is left untouched and repaired from
+              # the generic source ZIP under the dedicated name.
+              for candidate_name in (repaired, canonical):
+                  candidate = asset_by_name.get(candidate_name)
+                  if candidate is None:
+                      continue
+                  candidate_content = github.download(candidate)
+                  candidate_manifest = inspect_zip(candidate_content)
+                  if candidate_manifest.get('version') == version:
+                      candidate_manifest['url'] = candidate['browser_download_url']
+                      candidate_manifest['zipSHA256'] = hashlib.sha256(candidate_content).hexdigest()
+                      return candidate_manifest
+                  if candidate_name == repaired:
+                      raise ValueError(f'{repaired} has an incorrect internal version.')
+          
+              asset = asset_by_name.get(PACKAGE + '.zip')
               if asset is None:
-                  asset = next((item for item in assets if item['name'] == PACKAGE + '.zip'), None)
-              if asset is None:
+                  if canonical in asset_by_name:
+                      raise ValueError(f'{canonical} has an incorrect internal version and no source ZIP is available to repair it.')
                   print(f'{version}: waiting for a package ZIP upload.')
                   return None
               content = github.download(asset)
               manifest = inspect_zip(content)
               if manifest.get('version') != version:
-                  if asset['name'] == canonical:
-                      raise ValueError(f'{canonical} has an incorrect internal version; upload a corrected ZIP.')
                   if release.get('immutable'):
                       raise ValueError(f'{version} is immutable and its ZIP has the wrong version.')
                   content = stamp_zip(content, version)
                   print(f'{version}: creating a corrected versioned ZIP; original upload is preserved.')
+                  output_name = repaired if canonical in asset_by_name else canonical
                   if apply:
-                      asset = github.api('POST', f'/releases/{release["id"]}/assets?name=' + urllib.parse.quote(canonical, safe=''), content, binary=True)
+                      asset = github.api('POST', f'/releases/{release["id"]}/assets?name=' + urllib.parse.quote(output_name, safe=''), content, binary=True)
                       expected = 'sha256:' + hashlib.sha256(content).hexdigest()
                       if asset.get('digest') and asset['digest'] != expected:
                           raise ValueError('Uploaded corrected archive has an unexpected checksum.')
                   else:
                       tag = urllib.parse.quote(release['tag_name'], safe='')
-                      asset = {'browser_download_url': f'https://github.com/{github.repository}/releases/download/{tag}/{canonical}'}
+                      asset = {'browser_download_url': f'https://github.com/{github.repository}/releases/download/{tag}/{output_name}'}
                   manifest = inspect_zip(content)
               manifest['url'] = asset['browser_download_url']
               manifest['zipSHA256'] = hashlib.sha256(content).hexdigest()
@@ -265,3 +283,4 @@ jobs:
               except Exception as error:
                   print(f'::error::{error}', file=sys.stderr)
                   sys.exit(1)
+
