@@ -6,7 +6,7 @@
   "packages": {
     "com.ninsa.avatar-tools": {
       "versions": {
-        "1.0.0": {
+        "1.0.2": {
           "name": "com.ninsa.avatar-tools",
           "version": "1.0.0",
           "displayName": "NINSA Avatar Tools",
