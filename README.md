@@ -4,23 +4,19 @@ Unity Editor tools for VRChat avatars:
 - Avatar Toggle Manager
 - Avatar Dynamics Overhaul
 
-## Package
+## Add through VCC
 
-The ready-to-install VPM archive is `Releases/com.ninsa.avatar-tools-1.0.0.zip`. It contains the compiled Editor assembly and package manifest. It requires Unity 2022.3 and VRChat Avatars SDK 3.10.5 or newer.
+In VRChat Creator Companion, open **Settings → Packages → Add Repository** and paste this URL:
 
-For local use, open **VCC → Settings → Packages → User Packages → Add** and select an extracted `com.ninsa.avatar-tools` package folder.
+`https://raw.githubusercontent.com/Ninsa-xlr/com.ninsa.avatar-tools/main/index.json`
 
-## VCC repository listing
+Then confirm adding the repository and install **NINSA Avatar Tools** from your project’s package list.
 
-The listing source is configured for this repository. To publish version 1.0.0:
+## Package requirements
 
-1. Create a GitHub release with tag `v1.0.0`.
-2. Attach `Releases/com.ninsa.avatar-tools-1.0.0.zip` as the release asset.
-3. Publish the release.
-4. In **Actions**, manually run **Build Repo Listing** to refresh the VPM index.
+- Unity 2022.3
+- VRChat Avatars SDK 3.10.5 or newer
 
-GitHub Pages must use **GitHub Actions** as its deployment source. This repository is private, so its listing and release links are not ready to share publicly. Make it public before sharing it as a VCC repository.
+## Releases and source
 
-## Source archive
-
-The editor source files are in `Source/AvatarTools-Editor-Source.zip`.
+The VPM package archive is published in [GitHub Releases](https://github.com/Ninsa-xlr/com.ninsa.avatar-tools/releases). Editor source files are archived at `Source/AvatarTools-Editor-Source.zip`.

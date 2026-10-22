@@ -1,0 +1,27 @@
+{
+  "name": "NINSA Avatar Tools",
+  "id": "com.ninsa.avatar-tools.listing",
+  "url": "https://raw.githubusercontent.com/Ninsa-xlr/com.ninsa.avatar-tools/main/index.json",
+  "author": "Ninsa-xlr",
+  "packages": {
+    "com.ninsa.avatar-tools": {
+      "versions": {
+        "1.0.0": {
+          "name": "com.ninsa.avatar-tools",
+          "version": "1.0.0",
+          "displayName": "NINSA Avatar Tools",
+          "description": "Avatar Toggle Manager and Avatar Dynamics Overhaul tools for the Unity Editor and VRChat avatars.",
+          "unity": "2022.3",
+          "author": {
+            "name": "NINSA"
+          },
+          "vpmDependencies": {
+            "com.vrchat.avatars": ">=3.10.5"
+          },
+          "url": "https://github.com/Ninsa-xlr/com.ninsa.avatar-tools/releases/download/v1.0.0/com.ninsa.avatar-tools.zip",
+          "zipSHA256": "2ab4907fb7e92f31a114a2dc84316c60d87a820953bf772f80d7c4d2fb7e1389"
+        }
+      }
+    }
+  }
+}
