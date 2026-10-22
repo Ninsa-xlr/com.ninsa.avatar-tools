@@ -8,7 +8,7 @@
       "versions": {
         "1.0.2": {
           "name": "com.ninsa.avatar-tools",
-          "version": "1.0.0",
+          "version": "1.0.2",
           "displayName": "NINSA Avatar Tools",
           "description": "Avatar Toggle Manager and Avatar Dynamics Overhaul tools for the Unity Editor and VRChat avatars.",
           "unity": "2022.3",
