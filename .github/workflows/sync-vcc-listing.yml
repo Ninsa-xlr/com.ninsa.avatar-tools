@@ -177,8 +177,11 @@ jobs:
           
               asset = asset_by_name.get(PACKAGE + '.zip')
               if asset is None:
-                  if canonical in asset_by_name:
-                      raise ValueError(f'{canonical} has an incorrect internal version and no source ZIP is available to repair it.')
+                  # Some releases contain only a wrongly versioned canonical ZIP. Use
+                  # it as the source, preserve it, and publish the stamped copy under
+                  # the dedicated repair name.
+                  asset = asset_by_name.get(canonical)
+              if asset is None:
                   print(f'{version}: waiting for a package ZIP upload.')
                   return None
               content = github.download(asset)
